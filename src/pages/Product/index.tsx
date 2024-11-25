@@ -1,25 +1,22 @@
 import { useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
 
 import Hero from '../../components/Hero'
 import Section from '../../components/Section'
 import Gallery from '../../components/Gallery'
-import residenteEvil from '../../assets/images/resident.png'
-import { Game } from '../Home'
+import Loader from '../../components/Loader'
+
+import { useGetGameQuery } from '../../services/api'
+
+type GameParams = {
+  id: string
+}
 
 const Product = () => {
-  const { id } = useParams()
-
-  const [game, setGame] = useState<Game>()
-
-  useEffect(() => {
-    fetch(`https://fake-api-tau.vercel.app/api/eplay/jogos/${id}`)
-      .then((res) => res.json())
-      .then((res) => setGame(res))
-  }, [id])
+  const { id } = useParams() as GameParams
+  const { data: game } = useGetGameQuery(id)
 
   if (!game) {
-    return <h3>Carregando...</h3>
+    return <Loader />
   }
 
   return (
